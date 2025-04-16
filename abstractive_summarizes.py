@@ -17,10 +17,11 @@ data_file_path = os.path.join(data_folder, "meetingBank_styled.csv.gz")
 df = pd.read_csv(data_file_path, compression="gzip")
 print("CSV columns found:", df.columns.tolist())
 
-# Assume that the transcripts are in a column named 'transcript'.
-transcript_column = "transcript"
-if transcript_column not in df.columns:
-    raise ValueError(f"Column '{transcript_column}' not found in the CSV file.")
+# Check that required columns exist for the full summary.
+required_columns = ['transcript', 'word_count', 'sentence_count', 'motion_count', 'avg_word_len', 'sentiment']
+for col in required_columns:
+    if col not in df.columns:
+        raise ValueError(f"Required column '{col}' not found in the CSV file.")
 
 # ----- Initialize the T5 Model and Tokenizer -----
 t5_model_name = "t5-small"
@@ -68,46 +69,75 @@ def summarize_bart(text, max_length=150, min_length=40):
     return summary
 
 # Initialize lists to store summaries for all transcripts.
-t5_summaries = []
-bart_summaries = []
+t5_transcript_summaries = []
+bart_transcript_summaries = []
+t5_all_summaries = []
+bart_all_summaries = []
 
 # Iterate over every transcript in the dataframe.
 for idx, row in df.iterrows():
-    transcript = row[transcript_column]
+    transcript = row['transcript']
     if not isinstance(transcript, str) or not transcript.strip():
-        # If transcript is empty or not valid, store an empty summary.
-        t5_summaries.append("")
-        bart_summaries.append("")
+        # If the transcript is empty or invalid, store empty strings.
+        t5_transcript_summaries.append("")
+        bart_transcript_summaries.append("")
+        t5_all_summaries.append("")
+        bart_all_summaries.append("")
         continue
 
     print(f"\nProcessing transcript at index {idx}...")
-    # Generate summaries using both models.
+    
+    # Summary using transcript only.
     try:
-        t5_sum = summarize_t5(transcript)
-        bart_sum = summarize_bart(transcript)
+        t5_trans = summarize_t5(transcript)
+        bart_trans = summarize_bart(transcript)
     except Exception as e:
-        print(f"Error processing index {idx}: {e}")
-        t5_sum = ""
-        bart_sum = ""
+        print(f"Error processing transcript-only summary at index {idx}: {e}")
+        t5_trans, bart_trans = "", ""
+    
+    # Prepare a combined text with all the fields.
+    # Here we concatenate other column values. You may adjust the formatting as needed.
+    all_text = (
+        f"Transcript: {row['transcript']}. "
+        f"Word Count: {row['word_count']}. "
+        f"Sentence Count: {row['sentence_count']}. "
+        f"Motion Count: {row['motion_count']}. "
+        f"Average Word Length: {row['avg_word_len']}. "
+        f"Sentiment: {row['sentiment']}."
+    )
+    
+    try:
+        t5_all = summarize_t5(all_text)
+        bart_all = summarize_bart(all_text)
+    except Exception as e:
+        print(f"Error processing full summary at index {idx}: {e}")
+        t5_all, bart_all = "", ""
+    
+    # Store the generated summaries.
+    t5_transcript_summaries.append(t5_trans)
+    bart_transcript_summaries.append(bart_trans)
+    t5_all_summaries.append(t5_all)
+    bart_all_summaries.append(bart_all)
 
-    t5_summaries.append(t5_sum)
-    bart_summaries.append(bart_sum)
-
-# Create separate DataFrames for T5 and BART summaries.
-t5_df = pd.DataFrame({"summary": t5_summaries})
-bart_df = pd.DataFrame({"summary": bart_summaries})
+# Create DataFrames for each set of summaries.
+t5_trans_df = pd.DataFrame({"summary": t5_transcript_summaries})
+bart_trans_df = pd.DataFrame({"summary": bart_transcript_summaries})
+t5_all_df = pd.DataFrame({"summary": t5_all_summaries})
+bart_all_df = pd.DataFrame({"summary": bart_all_summaries})
 
 # Save each summary DataFrame to its own gzip-compressed CSV file inside the data folder.
-t5_csv_filename = os.path.join(data_folder, "t5_summaries.csv.gz")
-bart_csv_filename = os.path.join(data_folder, "bart_summaries.csv.gz")
-t5_df.to_csv(t5_csv_filename, index=False, compression="gzip")
-bart_df.to_csv(bart_csv_filename, index=False, compression="gzip")
-print(f"\nT5 summaries saved to {t5_csv_filename}")
-print(f"BART summaries saved to {bart_csv_filename}")
+t5_trans_csv = os.path.join(data_folder, "t5_summaries.csv.gz")
+bart_trans_csv = os.path.join(data_folder, "bart_summaries.csv.gz")
+t5_all_csv = os.path.join(data_folder, "t5_metadata_summaries.csv.gz")
+bart_all_csv = os.path.join(data_folder, "bart_metadata_summaries.csv.gz")
 
-# Zip the two gzip-compressed CSV files in a single zip archive inside the data folder.
-zip_filename = os.path.join(data_folder, "meetingbank_abstractive_summaries.zip")
-with zipfile.ZipFile(zip_filename, 'w', zipfile.ZIP_DEFLATED) as zipf:
-    zipf.write(t5_csv_filename, arcname=os.path.basename(t5_csv_filename))
-    zipf.write(bart_csv_filename, arcname=os.path.basename(bart_csv_filename))
-print(f"Zipped summaries saved to {zip_filename}")
+t5_trans_df.to_csv(t5_trans_csv, index=False, compression="gzip")
+bart_trans_df.to_csv(bart_trans_csv, index=False, compression="gzip")
+t5_all_df.to_csv(t5_all_csv, index=False, compression="gzip")
+bart_all_df.to_csv(bart_all_csv, index=False, compression="gzip")
+
+print(f"\nT5 transcript summaries saved to {t5_trans_csv}")
+print(f"BART transcript summaries saved to {bart_trans_csv}")
+print(f"T5 full summaries saved to {t5_all_csv}")
+print(f"BART full summaries saved to {bart_all_csv}")
+
