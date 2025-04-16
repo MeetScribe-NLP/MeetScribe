@@ -10,7 +10,7 @@ print(f"Using device: {device}")
 
 # Build the path to the data folder and file.
 current_dir = os.path.dirname(os.path.abspath(__file__))
-data_folder = os.path.join(current_dir, "..", "data")
+data_folder = os.path.join(current_dir, "data")
 data_file_path = os.path.join(data_folder, "meetingBank_styled.csv.gz")
 
 # Load the compressed CSV file.
