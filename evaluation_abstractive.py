@@ -31,7 +31,7 @@ summary_files = {
 }
 
 # 4. Tokenizer for chunking prompts
-model_name           = "gpt-3.5-turbo"
+model_name           = "gpt-4o-mini"
 encoding             = tiktoken.encoding_for_model(model_name)
 MAX_TOKENS_PER_CHUNK = 16000
 EVAL_MAX_TOKENS      = 50
