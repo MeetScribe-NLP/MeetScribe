@@ -40,7 +40,7 @@ bart_tokenizer = BartTokenizer.from_pretrained("facebook/bart-large-cnn")
 bart_model     = BartForConditionalGeneration.from_pretrained("facebook/bart-large-cnn").to(device)
 
 # 6. Initialize tiktoken for chunking
-encoding = tiktoken.encoding_for_model("gpt-3.5-turbo")
+encoding = tiktoken.encoding_for_model("gpt-4o-mini")
 MAX_TOKENS_PER_CHUNK = 16000
 SUMMARY_TOKENS = 150
 
@@ -49,7 +49,7 @@ def chunk_text(text: str, max_tokens: int):
     for i in range(0, len(tokens), max_tokens):
         yield encoding.decode(tokens[i: i + max_tokens])
 
-def summarize_openai_long(text: str, model="gpt-3.5-turbo"):
+def summarize_openai_long(text: str, model="gpt-4o-mini"):
     # 1) split into chunks
     summaries = []
     for chunk in chunk_text(text, MAX_TOKENS_PER_CHUNK):
@@ -136,6 +136,9 @@ for idx, row in df.iterrows():
     t5_full.append(t5_al)
     bart_full.append(bart_al)
     openai_full.append(oai_al)
+
+    if(idx == 500):
+        break
 
 # 10. Save all summaries
 outputs = {
