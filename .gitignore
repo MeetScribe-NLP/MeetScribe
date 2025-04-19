@@ -1,3 +1,4 @@
 data/*.csv
 myenv/
 summarized-data/*.csv
+summarized-data/evaluation/*.csv
