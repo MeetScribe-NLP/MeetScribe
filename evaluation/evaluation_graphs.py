@@ -24,7 +24,7 @@ titles = {
 ideal_values = {
     'fkgl': 8.0,
     'compression_ratio': 0.20,
-    'avg_quality_score': 0.85
+    'avg_quality_score': 5
 }
 
 # File mapping
