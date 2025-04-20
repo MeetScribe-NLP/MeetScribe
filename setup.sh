@@ -1,17 +1,24 @@
 #!/bin/bash
 
-# Install required Python packages
-echo "Installing datasets..."
-pip install datasets
+set -e  
 
-echo "Installing spacy..."
-pip install spacy
+echo "Starting setup..."
 
-echo "Installing textblob..."
-pip install textblob
+# === Core dependencies ===
+echo "Installing core Python packages..."
+pip install --upgrade pip
+pip install pandas torch transformers sentencepiece
 
-# Download SpaCy's English model
+# === NLP libraries ===
+echo "Installing NLP libraries..."
+pip install spacy textblob datasets
+
+# === SpaCy English model ===
 echo "Downloading SpaCy English model..."
 python -m spacy download en_core_web_sm
 
-echo "All installations completed."
+# === Evaluation & audio tools ===
+echo "Installing BERTScore and text-to-speech..."
+pip install bert_score gTTS IPython
+
+echo "All installations completed successfully."
