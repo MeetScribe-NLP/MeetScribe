@@ -1,4 +1,4 @@
-### Meeting Summarization Pipeline
+# Meeting Summarization Pipeline
 
 ##  Setup Instructions
 
