@@ -9,6 +9,7 @@ Before running any code in this repository, follow the steps below to set up you
 ## (Optional) Create a Virtual Environment
 
 python -m venv venv
+
 source venv/bin/activate
 
 
