@@ -1,8 +1,10 @@
-# Meeting Summarization
+# Meeting Summarization (MeetScribe)
+
 
 ##  Setup Instructions
 
 Before running any code in this repository, follow the steps below to set up your environment and install dependencies:
+
 
 ## (Optional) Create a Virtual Environment
 
@@ -19,6 +21,14 @@ Run the setup script:
 
 This will install all required Python packages and download SpaCy's English language model.
 
+
+## Add Your OpenAI API Key
+To use this project, you'll need to provide your OpenAI API key.
+Create and paste your key inside a file named OPENAI_API_KEY.
+
+For detailed instructions on how to obtain and set up your API key, you can refer to this helpful video: https://www.youtube.com/watch?v=gBSh9JI28UQ  
+
+
 ##  Project Overview
 - Automates meeting summaries, saving 4+ hours per professional per week
 - Captures critical decisions and action items with 100% phrasing accuracy
@@ -26,20 +36,25 @@ This will install all required Python packages and download SpaCy's English lang
 - Generates multi-format outputs (text and audio) for flexible consumption
 - Removes human bias from manual note-taking
 
+
 ##  Project Workflow and File Descriptions
 All summaries are generated with and without metadata. Due to the high volume, most data files are stored in compressed (.gz) format.
+
 
 ## 1. Data Collection
 Script: load_data.py
 Downloads meeting transcript data and stores it in: data/meetingBank.csv.gz
 
+
 ## 2. Data Cleaning
 Script: data-preprocessing/clean_transcript.py
 Removes noise and irrelevant content. Output stored in: data/meetingBank_cleaned.csv.gz
 
+
 ## 3. Stylistic Analysis
 Script: data-preprocessing/Stylistic_Analysis.py
 Performs stylistic feature extraction and stores results in: data/meetingBank_styled.csv.gz
+
 
 ## 4. Summarization
 Scripts:
@@ -48,10 +63,12 @@ Abstractive: abstractive_summarization.py (T5, BART, OpenAI)
 
 All generated summaries are stored in: summarized-data/
 
+
 ## 5. Audio Output
 Script: play-audio.py
 Generates audio for summaries. Currently supports a demo of the first OpenAI summary.
 The audio can be played from: temp_audio.py
+
 
 ## 6. Summary Evaluation
 Evaluated using four different metrics:
@@ -70,12 +87,18 @@ Scripts:
 
 Evaluation results are stored in: evaluation/summaries_metrics/
 
+
 ## 7. Visualization & Analysis
 Scripts:
 - For FKGL, GPT evaluation, Compression: evaluation/evaluation_graphs.py
 - For BERTScore: evaluation/evaluation_graphs_BERTScore.py
 
 Generated graphs are stored in: evaluation/evaluation_graphs/
+
+
+## 8. Results
+- Results are stored in evaluation/evaluation_graphs/
+
 
 #### References
 - https://meetingbank.github.io/
