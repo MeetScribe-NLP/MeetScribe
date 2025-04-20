@@ -1,4 +1,4 @@
-# Meeting Summarization Pipeline
+# Meeting Summarization
 
 ##  Setup Instructions
 
@@ -76,3 +76,9 @@ Scripts:
 - For BERTScore: evaluation/evaluation_graphs_BERTScore.py
 
 Generated graphs are stored in: evaluation/evaluation_graphs/
+
+#### References
+- https://meetingbank.github.io/
+- https://readable.com/readability/flesch-reading-ease-flesch-kincaid-grade-level
+- Heterogeneous Graph Neural Networks for Extractive Document Summarization - ACL Anthology
+- [2108.06310] MeetSum: Transforming Meeting Transcript Summarization using Transformers!
