@@ -46,6 +46,8 @@ All summaries are generated with and without metadata. Due to the high volume, m
 Script: load_data.py
 Downloads meeting transcript data and stores it in: data/meetingBank.csv.gz
 
+Dataset: https://meetingbank.github.io/
+
 
 ## 2. Data Cleaning
 Script: data-preprocessing/clean_transcript.py
