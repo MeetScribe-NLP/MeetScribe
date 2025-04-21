@@ -44,6 +44,7 @@ All summaries are generated with and without metadata. Due to the high volume, m
 
 ## 1. Data Collection
 Script: load_data.py
+
 Downloads meeting transcript data and stores it in: data/meetingBank.csv.gz
 
 Dataset: https://meetingbank.github.io/
@@ -51,24 +52,30 @@ Dataset: https://meetingbank.github.io/
 
 ## 2. Data Cleaning
 Script: data-preprocessing/clean_transcript.py
+
 Removes noise and irrelevant content. Output stored in: data/meetingBank_cleaned.csv.gz
 
 
 ## 3. Stylistic Analysis
 Script: data-preprocessing/Stylistic_Analysis.py
+
 Performs stylistic feature extraction and stores results in: data/meetingBank_styled.csv.gz
 
 
 ## 4. Summarization
 Scripts:
+
 Extractive: extractive_summarization.py (TextRank, LexRank, BERTSum)
+
 Abstractive: abstractive_summarization.py (T5, BART, OpenAI)
+
 
 All generated summaries are stored in: summarized-data/
 
 
 ## 5. Audio Output
 Script: play-audio.py
+
 Generates audio for summaries. Currently supports a demo of the first OpenAI summary.
 The audio can be played from: temp_audio.py
 
